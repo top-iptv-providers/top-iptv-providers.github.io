@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IPTV Listing</title>
+
+<style>
+body{
+font-family:Arial;
+background:#0a0a0a;
+color:#fff;
+margin:0;
+padding:20px;
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+color:#00e5ff;
+}
+
+.container{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.card{
+background:#111827;
+padding:15px;
+border-radius:15px;
+text-align:center;
+border:1px solid #222;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+border-color:#00e5ff;
+}
+
+.card img{
+width:100%;
+height:120px;
+object-fit:contain;
+background:#fff;
+padding:10px;
+border-radius:10px;
+}
+
+.title{
+color:#00e5ff;
+margin:10px 0;
+font-weight:bold;
+}
+
+.details{
+color:#aaa;
+font-size:14px;
+}
+
+.price{
+margin-top:10px;
+font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Search Results</h2>
+
+<div class="container" id="results"></div>
+
+<script>
+// IPTV DATA
+const data = [
+{
+name:"FLASH4K IPTV",
+img:"https://via.placeholder.com/200x120",
+channels:"18,000+ Channels",
+price:"$11.99"
+},
+{
+name:"LIVE IPTV NOW",
+img:"https://via.placeholder.com/200x120",
+channels:"40,000+ Channels",
+price:"$11.00"
+},
+{
+name:"XTREME HD IPTV",
+img:"https://via.placeholder.com/200x120",
+channels:"20,000+ Channels",
+price:"$15.99"
+},
+{
+name:"IPTV USAX",
+img:"https://via.placeholder.com/200x120",
+channels:"22,000+ Channels",
+price:"$7.99"
+},
+{
+name:"ZORBA IPTV",
+img:"https://via.placeholder.com/200x120",
+channels:"40,000+ Channels",
+price:"$15.00"
+}
+];
+
+// get search query from URL
+const params = new URLSearchParams(window.location.search);
+const query = params.get("query")?.toLowerCase() || "";
+
+document.title = "Results for " + query;
+
+const results = document.getElementById("results");
+
+// filter data
+let filtered = data.filter(item =>
+item.name.toLowerCase().includes(query)
+);
+
+// show results
+if(filtered.length === 0){
+results.innerHTML = "<h3 style='text-align:center'>No Results Found</h3>";
+} else {
+filtered.forEach(item => {
+results.innerHTML += `
+<div class="card">
+<img src="${item.img}">
+<div class="title">${item.name}</div>
+<div class="details">${item.channels}</div>
+<div class="price">Price ${item.price}</div>
+</div>
+`;
+});
+}
+</script>
+
+</body>
+</html>
