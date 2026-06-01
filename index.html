@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Advanced IPTV System</title>
+  <title>Advanced IPTV Single File System</title>
 
   <style>
     body {
+      margin: 0;
       font-family: Arial;
-      margin: 40px;
       background: #0f172a;
       color: white;
     }
 
-    h2 {
+    header {
+      padding: 20px;
+      text-align: center;
+      font-size: 22px;
       color: #38bdf8;
+      font-weight: bold;
     }
 
-    .search-box {
-      width: 500px;
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
     }
 
     input {
@@ -24,12 +30,12 @@
       padding: 14px;
       border-radius: 8px;
       border: none;
-      outline: none;
       font-size: 16px;
+      outline: none;
+      margin-bottom: 20px;
     }
 
     #results {
-      margin-top: 20px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 15px;
@@ -40,7 +46,6 @@
       border-radius: 12px;
       overflow: hidden;
       transition: 0.3s;
-      cursor: pointer;
     }
 
     .card:hover {
@@ -71,7 +76,7 @@
     .tags {
       margin-top: 8px;
       display: flex;
-      gap: 5px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
@@ -83,41 +88,76 @@
     }
 
     .play {
-      margin-top: 10px;
       display: inline-block;
+      margin-top: 10px;
       padding: 6px 10px;
       background: #22c55e;
-      border-radius: 6px;
-      font-size: 12px;
       color: white;
       text-decoration: none;
+      border-radius: 6px;
+      font-size: 12px;
     }
   </style>
 </head>
 
 <body>
 
-<h2>🔥 Advanced IPTV Search System</h2>
+<header>🔥 Advanced IPTV Search System</header>
 
-<div class="search-box">
+<div class="container">
   <input type="text" id="search" placeholder="Search IPTV channels...">
+  <div id="results"></div>
 </div>
 
-<div id="results"></div>
-
 <script>
-let data = [];
-
-// LOAD DATA FROM EXTERNAL FILE (listing.json)
-fetch("listing.json")
-  .then(res => res.json())
-  .then(json => {
-    data = json;
-    render(data);
-  });
+const data = [
+  {
+    name: "Sports IPTV HD",
+    category: "Sports",
+    desc: "Live football, cricket, UFC and all sports channels.",
+    status: "LIVE",
+    image: "https://picsum.photos/300/200?1",
+    link: "#"
+  },
+  {
+    name: "Movies IPTV Ultra",
+    category: "Movies",
+    desc: "Hollywood & Bollywood latest HD movies.",
+    status: "HD",
+    image: "https://picsum.photos/300/200?2",
+    link: "#"
+  },
+  {
+    name: "Kids IPTV Pack",
+    category: "Kids",
+    desc: "Cartoons and kids learning channels.",
+    status: "ACTIVE",
+    image: "https://picsum.photos/300/200?3",
+    link: "#"
+  },
+  {
+    name: "News IPTV Global",
+    category: "News",
+    desc: "24/7 world news live coverage.",
+    status: "LIVE",
+    image: "https://picsum.photos/300/200?4",
+    link: "#"
+  },
+  {
+    name: "World IPTV Premium",
+    category: "Global",
+    desc: "International channels USA, UK, India, Pakistan.",
+    status: "PREMIUM",
+    image: "https://picsum.photos/300/200?5",
+    link: "#"
+  }
+];
 
 const search = document.getElementById("search");
 const results = document.getElementById("results");
+
+// initial load
+render(data);
 
 search.addEventListener("input", function () {
   let value = this.value.toLowerCase();
