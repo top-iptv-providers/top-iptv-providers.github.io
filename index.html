@@ -196,6 +196,34 @@ color:#888;
     background:#00e5ff;
     color:#000;
 }
+
+  body{
+font-family:Arial;
+background:#0a0a0a;
+color:#fff;
+text-align:center;
+padding:40px;
+}
+
+input{
+width:60%;
+padding:15px;
+border:none;
+border-radius:10px;
+background:#111827;
+color:#fff;
+outline:none;
+}
+
+button{
+padding:15px 25px;
+margin-left:10px;
+border:none;
+border-radius:10px;
+background:#00e5ff;
+cursor:pointer;
+font-weight:bold;
+}
 </style>
 </head>
 <body>
@@ -205,11 +233,11 @@ color:#888;
 <h1>Find Your Perfect IPTV Service</h1>
 <p>Compare IPTV providers, check compatibility and discover the best streaming solution.</p>
 
-<div class="search-box">
-<input type="text" placeholder="Search IPTV Provider">
+
   <div class="search-container">
     <input type="text" id="search" placeholder="Search IPTV Provider...">
     <div id="suggestions"></div>
+    <button onclick="goSearch()">Search</button>
 </div>
 <button>Search</button>
 </div>
@@ -392,6 +420,13 @@ searchInput.addEventListener("keyup", function(){
     });
 
 });
+
+  function goSearch(){
+let value = document.getElementById("search").value;
+
+// redirect to listing.html with query
+window.location.href = "listing.html?query=" + encodeURIComponent(value);
+}
 </script>
 
 </body>
