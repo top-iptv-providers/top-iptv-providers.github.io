@@ -1,88 +1,153 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Search IPTV</title>
+  <title>IPTV Search</title>
+
   <style>
-    body { font-family: Arial; padding: 20px; }
-    input {
-      width: 300px;
-      padding: 10px;
-      font-size: 16px;
+    body {
+      font-family: Arial;
+      margin: 40px;
+      background: #f5f5f5;
     }
+
+    .search-box {
+      width: 400px;
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
     #results {
       margin-top: 10px;
-      border: 1px solid #ccc;
-      width: 300px;
-      display: none;
+      width: 100%;
     }
-    .item {
-      padding: 10px;
+
+    .card {
+      background: white;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       cursor: pointer;
-      border-bottom: 1px solid #eee;
+      transition: 0.2s;
     }
-    .item:hover {
-      background: #f2f2f2;
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .desc {
+      font-size: 13px;
+      color: #555;
+      margin-top: 4px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 8px;
+      font-size: 12px;
+      background: #007bff;
+      color: white;
+      border-radius: 4px;
+      margin-top: 6px;
     }
   </style>
 </head>
+
 <body>
 
-<h2>Search IPTV</h2>
+<h2>IPTV Search System</h2>
 
-<input type="text" id="search" placeholder="Search IPTV...">
-<div id="results"></div>
+<div class="search-box">
+  <input type="text" id="search" placeholder="Search IPTV...">
+  <div id="results"></div>
+</div>
 
 <script>
-let data = [];
-
-// OPTION 1: Static data
-data = [
-  "Sports IPTV",
-  "Movies IPTV",
-  "Kids IPTV",
-  "News IPTV",
-  "HD IPTV",
-  "India IPTV",
-  "Pakistan IPTV",
-  "Sports HD Live",
-  "World IPTV Channels"
+const data = [
+  {
+    name: "Sports IPTV HD",
+    category: "Sports",
+    desc: "All live sports channels including football, cricket, UFC.",
+    status: "LIVE"
+  },
+  {
+    name: "Movies IPTV Ultra",
+    category: "Movies",
+    desc: "Latest Hollywood & Bollywood movies in HD quality.",
+    status: "HD"
+  },
+  {
+    name: "Kids IPTV Pack",
+    category: "Kids",
+    desc: "Cartoons, learning channels and kids entertainment.",
+    status: "ACTIVE"
+  },
+  {
+    name: "News IPTV Global",
+    category: "News",
+    desc: "24/7 world news channels from multiple countries.",
+    status: "LIVE"
+  },
+  {
+    name: "World IPTV Premium",
+    category: "Global",
+    desc: "International channels from UK, USA, India, Pakistan.",
+    status: "PREMIUM"
+  }
 ];
 
-// search function
-const searchInput = document.getElementById("search");
-const resultsBox = document.getElementById("results");
+const search = document.getElementById("search");
+const results = document.getElementById("results");
 
-searchInput.addEventListener("input", function () {
+search.addEventListener("input", function () {
   let value = this.value.toLowerCase();
-  resultsBox.innerHTML = "";
+  results.innerHTML = "";
 
-  if (value === "") {
-    resultsBox.style.display = "none";
-    return;
-  }
+  if (value === "") return;
 
   let filtered = data.filter(item =>
-    item.toLowerCase().includes(value)
+    item.name.toLowerCase().includes(value) ||
+    item.category.toLowerCase().includes(value) ||
+    item.desc.toLowerCase().includes(value)
   );
 
   if (filtered.length === 0) {
-    resultsBox.innerHTML = "<div class='item'>No result found</div>";
-  } else {
-    filtered.forEach(item => {
-      let div = document.createElement("div");
-      div.className = "item";
-      div.innerText = item;
-
-      div.onclick = () => {
-        searchInput.value = item;
-        resultsBox.style.display = "none";
-      };
-
-      resultsBox.appendChild(div);
-    });
+    results.innerHTML = "<p>No results found</p>";
+    return;
   }
 
-  resultsBox.style.display = "block";
+  filtered.forEach(item => {
+    let div = document.createElement("div");
+    div.classList.add("card");
+
+    div.innerHTML = `
+      <div class="title">${item.name}</div>
+      <div class="desc">${item.desc}</div>
+      <div>
+        <span class="tag">${item.category}</span>
+        <span class="tag" style="background:green">${item.status}</span>
+      </div>
+    `;
+
+    div.onclick = () => {
+      search.value = item.name;
+      results.innerHTML = "";
+    };
+
+    results.appendChild(div);
+  });
 });
 </script>
 
