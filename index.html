@@ -1,121 +1,126 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>IPTV Search</title>
+  <title>Advanced IPTV System</title>
 
   <style>
     body {
       font-family: Arial;
       margin: 40px;
-      background: #f5f5f5;
+      background: #0f172a;
+      color: white;
+    }
+
+    h2 {
+      color: #38bdf8;
     }
 
     .search-box {
-      width: 400px;
-      position: relative;
+      width: 500px;
     }
 
     input {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
       font-size: 16px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
     }
 
     #results {
-      margin-top: 10px;
-      width: 100%;
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
     }
 
     .card {
-      background: white;
-      padding: 12px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      background: #1e293b;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: 0.3s;
       cursor: pointer;
-      transition: 0.2s;
     }
 
     .card:hover {
-      transform: scale(1.02);
+      transform: scale(1.03);
+    }
+
+    .thumb {
+      height: 140px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .content {
+      padding: 12px;
     }
 
     .title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
     }
 
     .desc {
-      font-size: 13px;
-      color: #555;
-      margin-top: 4px;
+      font-size: 12px;
+      color: #cbd5e1;
+      margin-top: 5px;
+    }
+
+    .tags {
+      margin-top: 8px;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
     }
 
     .tag {
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 5px;
+      background: #334155;
+    }
+
+    .play {
+      margin-top: 10px;
       display: inline-block;
-      padding: 3px 8px;
+      padding: 6px 10px;
+      background: #22c55e;
+      border-radius: 6px;
       font-size: 12px;
-      background: #007bff;
       color: white;
-      border-radius: 4px;
-      margin-top: 6px;
+      text-decoration: none;
     }
   </style>
 </head>
 
 <body>
 
-<h2>IPTV Search System</h2>
+<h2>🔥 Advanced IPTV Search System</h2>
 
 <div class="search-box">
-  <input type="text" id="search" placeholder="Search IPTV...">
-  <div id="results"></div>
+  <input type="text" id="search" placeholder="Search IPTV channels...">
 </div>
 
+<div id="results"></div>
+
 <script>
-const data = [
-  {
-    name: "Sports IPTV HD",
-    category: "Sports",
-    desc: "All live sports channels including football, cricket, UFC.",
-    status: "LIVE"
-  },
-  {
-    name: "Movies IPTV Ultra",
-    category: "Movies",
-    desc: "Latest Hollywood & Bollywood movies in HD quality.",
-    status: "HD"
-  },
-  {
-    name: "Kids IPTV Pack",
-    category: "Kids",
-    desc: "Cartoons, learning channels and kids entertainment.",
-    status: "ACTIVE"
-  },
-  {
-    name: "News IPTV Global",
-    category: "News",
-    desc: "24/7 world news channels from multiple countries.",
-    status: "LIVE"
-  },
-  {
-    name: "World IPTV Premium",
-    category: "Global",
-    desc: "International channels from UK, USA, India, Pakistan.",
-    status: "PREMIUM"
-  }
-];
+let data = [];
+
+// LOAD DATA FROM EXTERNAL FILE (listing.json)
+fetch("listing.json")
+  .then(res => res.json())
+  .then(json => {
+    data = json;
+    render(data);
+  });
 
 const search = document.getElementById("search");
 const results = document.getElementById("results");
 
 search.addEventListener("input", function () {
   let value = this.value.toLowerCase();
-  results.innerHTML = "";
-
-  if (value === "") return;
 
   let filtered = data.filter(item =>
     item.name.toLowerCase().includes(value) ||
@@ -123,32 +128,34 @@ search.addEventListener("input", function () {
     item.desc.toLowerCase().includes(value)
   );
 
-  if (filtered.length === 0) {
-    results.innerHTML = "<p>No results found</p>";
-    return;
-  }
+  render(filtered);
+});
 
-  filtered.forEach(item => {
+function render(list) {
+  results.innerHTML = "";
+
+  list.forEach(item => {
     let div = document.createElement("div");
     div.classList.add("card");
 
     div.innerHTML = `
-      <div class="title">${item.name}</div>
-      <div class="desc">${item.desc}</div>
-      <div>
-        <span class="tag">${item.category}</span>
-        <span class="tag" style="background:green">${item.status}</span>
+      <div class="thumb" style="background-image:url('${item.image}')"></div>
+      <div class="content">
+        <div class="title">${item.name}</div>
+        <div class="desc">${item.desc}</div>
+
+        <div class="tags">
+          <div class="tag">${item.category}</div>
+          <div class="tag">${item.status}</div>
+        </div>
+
+        <a class="play" href="${item.link}" target="_blank">▶ Play</a>
       </div>
     `;
 
-    div.onclick = () => {
-      search.value = item.name;
-      results.innerHTML = "";
-    };
-
     results.appendChild(div);
   });
-});
+}
 </script>
 
 </body>
